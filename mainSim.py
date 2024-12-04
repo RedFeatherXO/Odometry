@@ -60,7 +60,7 @@ try:
 
         # Controller-Eingaben lesen
         linear_speed = -1*left_stick_y # -0.5  # Negative Richtung invertieren
-        angular_speed = right_stick_x * 1.0
+        angular_speed = -1*right_stick_x #* 1.0
 
         # Encoder-Ticks berechnen
         wheel_circumference = 2 * math.pi * robot.r  # Umfang des Rades
@@ -75,7 +75,7 @@ try:
         simulation.simulate_movement(left_ticks, right_ticks)
 
         # Simulation zeichnen
-        simulation.draw(screen,linear_speed,angular_speed)
+        simulation.draw(screen,(0,0,255),linear_speed,angular_speed,True)
 
         pygame.display.flip()
         # Framerate steuern
