@@ -1,0 +1,94 @@
+''Left: -53.6, Right: -53.6, Turn: 0.00
+Left: -59.8, Right: -59.8, Turn: 0.00
+Left: -67.5, Right: -67.5, Turn: 0.00
+Left: -76.8, Right: -76.8, Turn: 0.00
+Left: -85.1, Right: -85.1, Turn: 0.00
+Left: -95.4, Right: -95.4, Turn: 0.00
+Left: -100.0, Right: -100.0, Turn: 0.00
+Left: -100.0, Right: -100.0, Turn: 0.00
+Left: -86.6, Right: -86.6, Turn: 0.00
+Left: 0.0, Right: 0.0, Turn: 0.00
+Left: 0.0, Right: 0.0, Turn: 0.00
+Left: -31.4, Right: -31.4, Turn: 0.00
+Left: -41.8, Right: -41.8, Turn: 0.00
+Left: 0.0, Right: 0.0, Turn: 0.00
+Traceback (most recent call last):
+  File "/home/pi/Documents/diffDrive/SimpleDriveWithController.py", line 158, in <module>
+    controller.listen()
+  File "/home/pi/.local/lib/python3.9/site-packages/pyPS4Controller/controller.py", line 262, in listen
+    self.__handle_event(button_id=button_id, button_type=button_type, value=value, overflow=overflow,
+  File "/home/pi/.local/lib/python3.9/site-packages/pyPS4Controller/controller.py", line 349, in __handle_event
+    self.on_R2_press(event.value)
+  File "/home/pi/Documents/diffDrive/SimpleDriveWithController.py", line 132, in on_R2_press
+    self._update_motors()
+  File "/home/pi/Documents/diffDrive/SimpleDriveWithController.py", line 148, in _update_motors
+    scale = self.max_speed / max_speed
+ZeroDivisionError: float division by zero''
+
+
+python3 /pfad/zu/button_start.py > /home/pi/button_start.log 2>&1 &
+
+nano ~/.config/lxsession/LXDE-pi/autostart
+mkdir -p ~/.config/lxsession/LXDE-pi
+touch ~/.config/lxsession/LXDE-pi/autostart
+@lxterminal -e "python3 /home/pi/Documents/diffDrive/ProgramStartButton.py"
+sudo reboot
+
+
+
+pi@meik:~ $ sudo systemctl status cron
+● cron.service - Regular background program processing daemon
+     Loaded: loaded (/lib/systemd/system/cron.service; enabled; vendor preset: >
+     Active: active (running) since Mon 2024-11-04 20:27:58 CET; 1min 48s ago
+       Docs: man:cron(8)
+   Main PID: 418 (cron)
+      Tasks: 1 (limit: 1539)
+        CPU: 132ms
+     CGroup: /system.slice/cron.service
+             └─418 /usr/sbin/cron -f
+
+pi@meik:~ $ grep CRON /var/l
+lib/   local/ lock/  log/   
+pi@meik:~ $ grep CRON /var/log/syslog
+Nov  3 16:00:17 meik cron[396]: (CRON) INFO (pidfile fd = 3)
+Nov  3 16:00:17 meik cron[396]: (CRON) INFO (Running @reboot jobs)
+Nov  3 16:48:27 meik cron[384]: (CRON) INFO (pidfile fd = 3)
+Nov  3 16:48:27 meik cron[384]: (CRON) INFO (Running @reboot jobs)
+Nov  4 18:17:01 meik CRON[2362]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+Nov  4 18:22:14 meik cron[426]: (CRON) INFO (pidfile fd = 3)
+Nov  4 18:22:14 meik cron[426]: (CRON) INFO (Running @reboot jobs)
+grep: /var/log/syslog: binary file matches
+pi@meik:~ $ ls -l /home/pi/Documents/diffDrive/NewProgramStartButton.py 
+-rw-r--r-- 1 pi pi 2141 Nov  4 20:20 /home/pi/Documents/diffDrive/NewProgramStartButton.py
+pi@meik:~ $ chmod +x /home/pi/Documents/diffDrive/NewProgramStartButton.py 
+pi@meik:~ $ ls -l /home/pi/Documents/diffDrive/NewProgramStartButton.py 
+-rwxr-xr-x 1 pi pi 2141 Nov  4 20:20 /home/pi/Documents/diffDrive/NewProgramStartButton.py
+pi@meik:~ $ echo $DISPLAY
+:0
+pi@meik:~ $ /home/pi/delayed_start.sh 
+bash: /home/pi/delayed_start.sh: /bin/bas: bad interpreter: No such file or directory
+pi@meik:~ $ /home/pi/
+Bookshelf/        delayed_start.sh  Downloads/        .pki/             Videos/           
+.cache/           Desktop/          .local/           .pp_backup/       .vnc/             
+.config/          Documents/        Music/            Public/           .vscode/          
+.config_backup/   .dotnet/          Pictures/         Templates/        
+pi@meik:~ $ /home/pi/
+Bookshelf/        delayed_start.sh  Downloads/        .pki/             Videos/           
+.cache/           Desktop/          .local/           .pp_backup/       .vnc/             
+.config/          Documents/        Music/            Public/           .vscode/          
+.config_backup/   .dotnet/          Pictures/         Templates/        
+pi@meik:~ $ /home/pi/delayed_start.sh 
+bash: /home/pi/delayed_start.sh: /bin/bas: bad interpreter: No such file or directory
+pi@meik:~ $ nano /home/pi/
+1                     .config/              Downloads/            Public/               .xorgxrdp.10.log
+.bash_history         .config_backup/       .local/               .selected_editor      .xorgxrdp.10.log.old
+.bash_logout          cron_log.txt          Music/                Templates/            .xorgxrdp.11.log
+.bashrc               delayed_start.sh      Pictures/             Videos/               .xsession-errors
+Bookshelf/            Desktop/              .pki/                 .vnc/                 .xsession-errors.old
+button_start.log      Documents/            .pp_backup/           .vscode/              
+.cache/               .dotnet/              .profile              .Xauthority           
+pi@meik:~ $ nano /home/pi/delayed_start.sh 
+pi@meik:~ $ /home/pi/.Xauthority
+bash: /home/pi/.Xauthority: Permission denied
+pi@meik:~ $ nano /home/pi/delayed_start.sh 
+
