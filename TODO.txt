@@ -1,0 +1,2 @@
+- Wenn ich mich auf der stelle drehe sollte der Drehpunkt am stehenden rad sein
+- Encoder daten lesen -> programm dafür ist auf dem raspberry pi
