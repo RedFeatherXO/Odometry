@@ -10,7 +10,7 @@ robot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
 realRobot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
 simulation = RobotSimulation(robot)
 robController = RobotController(realRobot)
-RealSim = RobotSimulation(robController)
+RealSim = RobotSimulation(realRobot)
 
 # Pygame initialisieren
 pygame.init()
