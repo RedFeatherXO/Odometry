@@ -37,6 +37,7 @@ try:
     else:
         print("Unerwartete Antwort vom PC:", response)
 
+    time.sleep(1)
     # Hauptschleife (Dummy-Daten senden)
     while True:
         # Daten vom PC empfangen

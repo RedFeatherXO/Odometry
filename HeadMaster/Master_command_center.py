@@ -21,13 +21,14 @@ try:
         print("Antwort gesendet: HELLO_PI")
     else:
         print("Unerwartete Handshake-Nachricht:", message)
-
+    time.sleep(1)
     # Hauptschleife (Dummy-Daten empfangen und antworten)
     while True:
         data = conn.recv(1024).decode('utf-8').strip()
         print("Daten empfangen:", data)
         if data:
-            left_ticks, right_ticks = map(int, data.split(","))
+            #left_ticks, right_ticks = map(int, data.split(","))
+            left_ticks, right_ticks = data.split(",")
             print(f"Encoder: {left_ticks}, {right_ticks}")
         
         # Steuerbefehle senden (z. B. Geschwindigkeit)
