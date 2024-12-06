@@ -4,17 +4,21 @@ import math
 from DifferentialDriveRobot import DifferentialDriveRobot
 from RobotSimulationPyGame import RobotSimulation
 from RobotController import RobotController
+from MotorController import MotorControl
 
 # Roboter initialisieren
 robot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
 realRobot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
 simulation = RobotSimulation(robot)
 robController = RobotController(realRobot)
+motorController = MotorControl()
 RealSim = RobotSimulation(realRobot)
 
 # Pygame initialisieren
 pygame.init()
 pygame.joystick.init()
+motorController.setup_gpio()
+motorController.set_motor_speed(50,50)
 
 def wait_for_controller():
     print("Warte auf Controller-Verbindung...")
