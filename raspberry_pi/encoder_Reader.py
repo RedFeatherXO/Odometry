@@ -23,13 +23,13 @@ class EncoderReader:
     def GetValues(self):
         return self.spin_count1,self.spin_count2
               
-    def myCallBack1(self):
+    def myCallBack1(self,channel):
         if not GPIO.input(self.E1B):
             self.spin_count1 += 1
         elif GPIO.input(self.E1B):
             self.spin_count1 -= 1
 
-    def myCallBack2(self):
+    def myCallBack2(self,channel):
         if not GPIO.input(self.E2B):
             self.spin_count2 += 1
         elif GPIO.input(self.E2B):
