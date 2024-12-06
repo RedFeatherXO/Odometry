@@ -26,21 +26,29 @@ try:
     time.sleep(1)
     # Hauptschleife (Dummy-Daten empfangen und antworten)
     while True:
-        print("Working")
-        data = conn.recv(1024).decode('utf-8').strip()
-        print("Daten empfangen:", data)
-        print("Working3")
-        if data:
-            #left_ticks, right_ticks = map(int, data.split(","))
+        print("Warte auf Daten...")
+        try:
+            # Versuche, Daten zu empfangen
+            data = conn.recv(1024).decode('utf-8').strip()
+            if not data:
+                print("Keine Daten empfangen, weiter mit der nächsten Iteration...")
+                continue  # Rücksprung zum Anfang der Schleife, wenn keine Daten empfangen wurden
+
+            print("Daten empfangen:", data)
+
+            # Daten weiterverarbeiten
             left_ticks, right_ticks = data.split(",")
             print(f"Encoder: {left_ticks}, {right_ticks}")
-        
-        print("Working2")
-        # Steuerbefehle senden (z. B. Geschwindigkeit)
-        left_speed = 50  # Beispielwert
-        right_speed = 50  # Beispielwert
-        conn.send(f"{left_speed},{right_speed}\n".encode('utf-8'))
-        time.sleep(0.1)
+
+            # Steuerbefehle senden (z. B. Geschwindigkeit)
+            left_speed = 50  # Beispielwert
+            right_speed = 50  # Beispielwert
+            conn.send(f"{left_speed},{right_speed}\n".encode('utf-8'))
+
+        except socket.timeout:
+            # Timeout ausgelöst, keine Daten empfangen
+            print("Timeout: Keine Daten empfangen, versuche es erneut.")
+            continue  # Weiter mit der nächsten Iteration
 
 except KeyboardInterrupt:
     print("Beendet durch Benutzer")

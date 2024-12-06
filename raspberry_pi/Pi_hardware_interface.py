@@ -42,22 +42,27 @@ try:
     time.sleep(1)
     # Hauptschleife (Dummy-Daten senden)
     while True:
-        # Daten vom PC empfangen
-        data = sock.recv(1024).decode('utf-8')
-        if data:
-            left_speed, right_speed = map(int, data.split(","))
+        try:
+            # Daten vom PC empfangen
+            data = sock.recv(1024).decode('utf-8')
+            if data:
+                left_speed, right_speed = map(int, data.split(","))
+                
+                # PWM-Signale setzen
+                pwm1.ChangeDutyCycle(left_speed)
+                pwm2.ChangeDutyCycle(right_speed)
             
-            # PWM-Signale setzen
-            pwm1.ChangeDutyCycle(left_speed)
-            pwm2.ChangeDutyCycle(right_speed)
-        
-        # Encoder-Werte simulieren (z. B. Zufallswerte oder GPIO-Eingaben)
-        left_ticks = 10  # Hier echte Encoder-Daten verwenden
-        right_ticks = 12  # Hier echte Encoder-Daten verwenden
-        
-        # Daten an PC senden
-        sock.send(f"{left_ticks},{right_ticks}\n".encode('utf-8'))
-        time.sleep(0.1)
+            # Encoder-Werte simulieren (z. B. Zufallswerte oder GPIO-Eingaben)
+            left_ticks = 10  # Hier echte Encoder-Daten verwenden
+            right_ticks = 12  # Hier echte Encoder-Daten verwenden
+            
+            # Daten an PC senden
+            sock.send(f"{left_ticks},{right_ticks}\n".encode('utf-8'))
+            time.sleep(0.1)
+        except socket.timeout:
+            # Timeout ausgelöst, keine Daten empfangen
+            print("Timeout: Keine Daten empfangen, versuche es erneut.")
+            continue  # Weiter mit der nächsten Iteration
 
 except KeyboardInterrupt:
     print("Beendet durch Benutzer")
