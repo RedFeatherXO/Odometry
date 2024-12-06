@@ -61,6 +61,7 @@ try:
             time.sleep(0.1)
         except socket.timeout:
             # Timeout ausgelöst, keine Daten empfangen
+            sock.send(f"{left_ticks},{right_ticks}\n".encode('utf-8'))
             print("Timeout: Keine Daten empfangen, versuche es erneut.")
             continue  # Weiter mit der nächsten Iteration
 
