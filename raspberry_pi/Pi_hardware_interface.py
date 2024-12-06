@@ -17,7 +17,7 @@ pwm1.start(0)
 pwm2.start(0)
 
 # Socket-Setup
-HOST = '192.168.0.104'  # IP-Adresse des PCs
+HOST = '192.168.178.20'  # IP-Adresse des PCs
 PORT = 12345
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
