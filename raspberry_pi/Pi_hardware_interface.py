@@ -20,11 +20,12 @@ pwm2.start(0)
 HOST = '192.168.178.20'  # IP-Adresse des PCs
 PORT = 12345
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.settimeout(1)  # Timeout nach 5 Sekunden
 
 print("Versuche Verbindung mit dem PC...")
 sock.connect((HOST, PORT))
 print("Verbindung hergestellt!")
+
+sock.settimeout(1)  # Timeout nach 5 Sekunden
 
 try:
     # Handshake: Sende Testnachricht an PC

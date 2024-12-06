@@ -7,11 +7,12 @@ PORT = 12345
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind((HOST, PORT))
 sock.listen(1)
-sock.settimeout(1)  # Timeout nach 5 Sekunden
 
 print("Warte auf Verbindung...")
 conn, addr = sock.accept()
 print(f"Verbunden mit {addr}")
+
+sock.settimeout(1)  # Timeout nach 5 Sekunden
 
 try:
     # Handshake: Warte auf Nachricht vom Raspberry Pi
