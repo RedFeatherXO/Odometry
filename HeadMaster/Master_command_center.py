@@ -26,11 +26,15 @@ try:
     while True:
         data = conn.recv(1024).decode('utf-8').strip()
         print("Daten empfangen:", data)
+        if data:
+            left_ticks, right_ticks = map(int, data.split(","))
+            print(f"Encoder: {left_ticks}, {right_ticks}")
         
-        # Antwort senden
-        response = "RECEIVED:" + data + "\n"
-        conn.send(response.encode('utf-8'))
-        print("Antwort gesendet:", response.strip())
+        # Steuerbefehle senden (z. B. Geschwindigkeit)
+        left_speed = 50  # Beispielwert
+        right_speed = 50  # Beispielwert
+        conn.send(f"{left_speed},{right_speed}\n".encode('utf-8'))
+        time.sleep(0.1)
 
 except KeyboardInterrupt:
     print("Beendet durch Benutzer")
