@@ -7,6 +7,7 @@ PORT = 12345
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind((HOST, PORT))
 sock.listen(1)
+sock.settimeout(1)  # Timeout nach 5 Sekunden
 
 print("Warte auf Verbindung...")
 conn, addr = sock.accept()
@@ -24,13 +25,16 @@ try:
     time.sleep(1)
     # Hauptschleife (Dummy-Daten empfangen und antworten)
     while True:
+        print("Working")
         data = conn.recv(1024).decode('utf-8').strip()
         print("Daten empfangen:", data)
+        print("Working3")
         if data:
             #left_ticks, right_ticks = map(int, data.split(","))
             left_ticks, right_ticks = data.split(",")
             print(f"Encoder: {left_ticks}, {right_ticks}")
         
+        print("Working2")
         # Steuerbefehle senden (z. B. Geschwindigkeit)
         left_speed = 50  # Beispielwert
         right_speed = 50  # Beispielwert
