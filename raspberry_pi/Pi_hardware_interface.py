@@ -1,6 +1,9 @@
 import RPi.GPIO as GPIO
 import socket
 import time
+from encoder_Reader import EncoderReader
+
+encoderReader = EncoderReader(20,21,26,27)
 
 # GPIO-Setup
 AIN1 = 17
@@ -53,14 +56,14 @@ try:
                 pwm2.ChangeDutyCycle(right_speed)
             
             # Encoder-Werte simulieren (z. B. Zufallswerte oder GPIO-Eingaben)
-            left_ticks = 10  # Hier echte Encoder-Daten verwenden
-            right_ticks = 12  # Hier echte Encoder-Daten verwenden
+            left_ticks, right_ticks = encoderReader.GetValues() 
             
             # Daten an PC senden
             sock.send(f"{left_ticks},{right_ticks}\n".encode('utf-8'))
             time.sleep(0.1)
         except socket.timeout:
             # Timeout ausgelöst, keine Daten empfangen
+            left_ticks, right_ticks = encoderReader.GetValues() 
             sock.send(f"{10},{12}\n".encode('utf-8'))
             print("Timeout: Keine Daten empfangen, versuche es erneut.")
             continue  # Weiter mit der nächsten Iteration
