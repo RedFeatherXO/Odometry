@@ -63,8 +63,6 @@ try:
             time.sleep(0.1)
         except socket.timeout:
             # Timeout ausgelöst, keine Daten empfangen
-            left_ticks, right_ticks = encoderReader.GetValues() 
-            sock.send(f"{10},{12}\n".encode('utf-8'))
             print("Timeout: Keine Daten empfangen, versuche es erneut.")
             continue  # Weiter mit der nächsten Iteration
 

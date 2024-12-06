@@ -14,6 +14,9 @@ print(f"Verbunden mit {addr}")
 
 sock.settimeout(1)  # Timeout nach 5 Sekunden
 
+last_count1 = 0
+last_count2 = 0
+
 try:
     # Handshake: Warte auf Nachricht vom Raspberry Pi
     message = conn.recv(1024).decode('utf-8').strip()
@@ -26,7 +29,7 @@ try:
     time.sleep(1)
     # Hauptschleife (Dummy-Daten empfangen und antworten)
     while True:
-        print("Warte auf Daten...")
+        #print("Warte auf Daten...")
         try:
             # Versuche, Daten zu empfangen
             data = conn.recv(1024).decode('utf-8').strip()
