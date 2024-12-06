@@ -5,7 +5,8 @@ from DifferentialDriveRobot import DifferentialDriveRobot
 from RobotSimulationPyGame import RobotSimulation
 from RobotController import RobotController
 from MotorController import MotorControl
-
+import os
+os.environ["SDL_VIDEODRIVER"] = "x11"
 # Roboter initialisieren
 robot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
 realRobot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
