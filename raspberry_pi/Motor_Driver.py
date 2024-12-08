@@ -36,16 +36,15 @@ class MotorDriver:
         self.PWM_BIN2 = GPIO.PWM(self.BIN2,50)
         self.PWM_BIN2.start(0)
 
-    def DriveForward(self):
+    def DriveBackward(self):
         self.PWM_AIN1.start(self.PWM_LEFT)
         self.PWM_AIN2.start(0)
         self.PWM_BIN1.start(0)
         self.PWM_BIN2.start(self.PWM_RIGHT)
 
-    def DriveBackward(self):
-
-        self.PWM_AIN1.start(self.PWM_LEFT)
-        self.PWM_AIN2.start(0)
+    def DriveForward(self):
+        self.PWM_AIN1.start(0)
+        self.PWM_AIN2.start(self.PWM_LEFT)
         self.PWM_BIN1.start(self.PWM_RIGHT)
         self.PWM_BIN2.start(0)
 
