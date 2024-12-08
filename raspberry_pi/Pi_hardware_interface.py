@@ -81,7 +81,7 @@ try:
 
     # Hauptschleife
     while True:
-        motorDriver.forward()
+        motorDriver.DriveForward()
         try:
             # Versuche, Daten zu empfangen
             # readable, _, _ = select.select([sock], [], [], 0.1)
@@ -119,6 +119,7 @@ try:
 except KeyboardInterrupt:
     print("Beendet durch Benutzer")
 finally:
-    MotorDriver.stopPWM()
+    motorDriver.DriveStop()
+    motorDriver.stopPWM()
     sock.close()
     GPIO.cleanup()
