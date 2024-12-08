@@ -4,8 +4,10 @@ import select
 import errno
 import RPi.GPIO as GPIO
 from encoder_Reader import EncoderReader
+from Motor_Driver import MotorDriver
 
 encoderReader = EncoderReader(20,21,26,27)
+motorDriver  = MotorDriver(17,18,22,23)
 
 # GPIO-Setup
 AIN1 = 17
@@ -90,6 +92,7 @@ try:
 
     # Hauptschleife
     while True:
+        motorDriver.forward()
         try:
             # Versuche, Daten zu empfangen
             # readable, _, _ = select.select([sock], [], [], 0.1)

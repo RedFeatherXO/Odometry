@@ -51,16 +51,21 @@ try:
                             print("Verbindung geschlossen")
                             break
                         
-                        print("Daten empfangen:", data)
+                        #print("Daten empfangen:", data)
                         
-                        # Daten weiterverarbeiten
-                        left_ticks, right_ticks = data.split(",")
-                        print(f"Encoder: {left_ticks}, {right_ticks}")
-                        
-                        # Steuerbefehle senden
-                        # left_speed = 50
-                        # right_speed = 50
-                        # conn.send(f"{left_speed},{right_speed}\n".encode('utf-8'))
+                        try:
+                            # Daten weiterverarbeiten
+                            left_ticks, right_ticks = data.split(",")
+                            print(f"Encoder: {left_ticks}, {right_ticks}")
+                            
+                            # Steuerbefehle senden
+                            # left_speed = 50
+                            # right_speed = 50
+                            # conn.send(f"{left_speed},{right_speed}\n".encode('utf-8'))
+                        except ValueError as ve:
+                            #print(f"Fehler beim Verarbeiten der Daten: {ve}")
+                            #print(f"Empfangene Daten: {data}")
+                            continue
                     
                     time.sleep(0.1)  # Kleine Pause, um CPU-Auslastung zu reduzieren
                 
