@@ -59,7 +59,7 @@ try:
             left_ticks, right_ticks = encoderReader.GetValues() 
             
             # Daten an PC senden
-            sock.send(f"{left_ticks},{right_ticks}\n".encode('utf-8'))
+            sock.send(f"{50},{50}\n".encode('utf-8'))
             time.sleep(0.1)
         except socket.timeout:
             # Timeout ausgelöst, keine Daten empfangen
