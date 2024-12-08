@@ -92,21 +92,21 @@ try:
     while True:
         try:
             # Versuche, Daten zu empfangen
-            readable, _, _ = select.select([sock], [], [], 0.1)
+            # readable, _, _ = select.select([sock], [], [], 0.1)
             
-            if readable:
-                try:
-                    data = sock.recv(1024).decode('utf-8').strip()
-                    print("Empfangene Daten:", data)  # Debug-Ausgabe
+            # if readable:
+            #     try:
+            #         data = sock.recv(1024).decode('utf-8').strip()
+            #         print("Empfangene Daten:", data)  # Debug-Ausgabe
                     
-                    if data:
-                        left_speed, right_speed = map(int, data.split(","))
+            #         if data:
+            #             left_speed, right_speed = map(int, data.split(","))
                         
-                        # PWM-Signale setzen
-                        pwm1.ChangeDutyCycle(left_speed)
-                        pwm2.ChangeDutyCycle(right_speed)
-                except BlockingIOError:
-                    pass
+            #             # PWM-Signale setzen
+            #             pwm1.ChangeDutyCycle(left_speed)
+            #             pwm2.ChangeDutyCycle(right_speed)
+            #     except BlockingIOError:
+            #         pass
             
             # Encoder-Werte abrufen
             left_ticks, right_ticks = encoderReader.GetValues() 

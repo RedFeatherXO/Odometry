@@ -43,9 +43,9 @@ try:
                 try:
                     # select() verwenden, um zu prüfen, ob Daten verfügbar sind
                     ready = select.select([conn], [], [], 1.0)
-                    print(f"ready: {ready}")
+                    #print(f"ready: {ready}")
                     if ready[0]:
-                        print("conn.recv")
+                        #print("conn.recv")
                         data = conn.recv(1024).decode('utf-8').strip()
                         if not data:
                             print("Verbindung geschlossen")
@@ -58,9 +58,9 @@ try:
                         print(f"Encoder: {left_ticks}, {right_ticks}")
                         
                         # Steuerbefehle senden
-                        left_speed = 50
-                        right_speed = 50
-                        conn.send(f"{left_speed},{right_speed}\n".encode('utf-8'))
+                        # left_speed = 50
+                        # right_speed = 50
+                        # conn.send(f"{left_speed},{right_speed}\n".encode('utf-8'))
                     
                     time.sleep(0.1)  # Kleine Pause, um CPU-Auslastung zu reduzieren
                 
