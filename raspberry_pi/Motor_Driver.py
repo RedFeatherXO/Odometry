@@ -20,14 +20,9 @@ class MotorDriver:
         self.setupGPIO()
 
     def setupGPIO(self):
-        try:
-            GPIO.setmode(GPIO.BCM)
-        except Exception as e:
-            print(f"Setup GPIO in MotorDriver: {e}")
-        GPIO.setwarnings(False)
         GPIO.setup(self.AIN1,GPIO.OUT)
         self.PWM_AIN1 = GPIO.PWM(self.AIN1, 50)
-        self.PWM_AIN1 .start(0)
+        self.PWM_AIN1.start(0)
 
         GPIO.setup(self.AIN2, GPIO.OUT)
         self.PWM_AIN2 = GPIO.PWM(self.AIN2,50)

@@ -5,7 +5,10 @@ import errno
 import RPi.GPIO as GPIO
 from encoder_Reader import EncoderReader
 from Motor_Driver import MotorDriver
+from GPIO_Manager import GPIOManager
 
+GPIO.cleanup()  # Räumt alle vorherigen GPIO-Einstellungen auf
+gpioManager = GPIOManager()
 encoderReader = EncoderReader(20,21,26,27)
 motorDriver  = MotorDriver(17,18,22,23)
 

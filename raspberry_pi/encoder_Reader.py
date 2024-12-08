@@ -12,7 +12,6 @@ class EncoderReader:
         self.setup_gpio()
 
     def setup_gpio(self):
-        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.E1A,GPIO.IN,pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.E1B,GPIO.IN,pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.E2A,GPIO.IN,pull_up_down=GPIO.PUD_UP)
