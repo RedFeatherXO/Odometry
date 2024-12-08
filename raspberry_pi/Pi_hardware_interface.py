@@ -9,22 +9,8 @@ from GPIO_Manager import GPIOManager
 
 GPIO.cleanup()  # Räumt alle vorherigen GPIO-Einstellungen auf
 gpioManager = GPIOManager()
-#encoderReader = EncoderReader(20,21,26,27)
+encoderReader = EncoderReader(20,21,26,27)
 motorDriver  = MotorDriver(17,18,22,23)
-
-# GPIO-Setup
-AIN1 = 17
-AIN2 = 18
-PWM_FREQ = 50
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(AIN1, GPIO.OUT)
-GPIO.setup(AIN2, GPIO.OUT)
-
-pwm1 = GPIO.PWM(AIN1, PWM_FREQ)
-pwm2 = GPIO.PWM(AIN2, PWM_FREQ)
-pwm1.start(0)
-pwm2.start(0)
 
 # Socket-Setup
 HOST = '192.168.178.20'  # IP-Adresse des PCs
