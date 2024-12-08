@@ -119,7 +119,6 @@ try:
 except KeyboardInterrupt:
     print("Beendet durch Benutzer")
 finally:
-    pwm1.stop()
-    pwm2.stop()
+    MotorDriver.stopPWM()
     sock.close()
     GPIO.cleanup()

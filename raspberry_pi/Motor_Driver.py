@@ -57,3 +57,12 @@ class MotorDriver:
     def setPWM(self, Left, Right):
         self.PWM_LEFT = Left
         self.PWM_RIGHT = Right
+
+    def getPWM(self):
+        pass
+
+    def stopPWM(self):
+        self.PWM_AIN1.stop()
+        self.PWM_AIN2.stop()
+        self.PWM_BIN1.stop()
+        self.PWM_BIN2.stop()
