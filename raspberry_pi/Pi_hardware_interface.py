@@ -1,6 +1,7 @@
 import socket
 import time
 import select
+import errno
 import RPi.GPIO as GPIO
 from encoder_Reader import EncoderReader
 
@@ -29,11 +30,38 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setblocking(False)
 
 print("Versuche Verbindung mit dem PC...")
+
+# Verbindungsaufbau mit Timeout-Behandlung
 try:
     sock.connect((HOST, PORT))
-except BlockingIOError:
-    # Dieser Fehler ist normal beim nicht-blockierenden connect
-    pass
+except (socket.error, BlockingIOError) as e:
+    # Prüfe, ob Verbindung in Arbeit ist
+    if e.errno != errno.EINPROGRESS:
+        print(f"Verbindungsfehler: {e}")
+        sock.close()
+        exit(1)
+
+# Warte auf Verbindungsaufbau
+start_time = time.time()
+while time.time() - start_time < 10:  # 10 Sekunden Timeout
+    try:
+        # Prüfe Verbindungsstatus
+        sock.send(b'')  # Versuche, Daten zu senden
+        break  # Erfolgreich verbunden
+    except BlockingIOError:
+        # Verbindung noch nicht bereit
+        try:
+            # Überprüfe Fehler mit select
+            _, writable, _ = select.select([], [sock], [], 1.0)
+            if writable:
+                break  # Verbindung hergestellt
+        except select.error:
+            pass
+        time.sleep(0.1)
+else:
+    print("Verbindungsaufbau fehlgeschlagen")
+    sock.close()
+    exit(1)
 
 print("Verbindung hergestellt!")
 
@@ -67,15 +95,18 @@ try:
             readable, _, _ = select.select([sock], [], [], 0.1)
             
             if readable:
-                data = sock.recv(1024).decode('utf-8').strip()
-                print("Empfangene Daten:", data)  # Debug-Ausgabe
-                
-                if data:
-                    left_speed, right_speed = map(int, data.split(","))
+                try:
+                    data = sock.recv(1024).decode('utf-8').strip()
+                    print("Empfangene Daten:", data)  # Debug-Ausgabe
                     
-                    # PWM-Signale setzen
-                    pwm1.ChangeDutyCycle(left_speed)
-                    pwm2.ChangeDutyCycle(right_speed)
+                    if data:
+                        left_speed, right_speed = map(int, data.split(","))
+                        
+                        # PWM-Signale setzen
+                        pwm1.ChangeDutyCycle(left_speed)
+                        pwm2.ChangeDutyCycle(right_speed)
+                except BlockingIOError:
+                    pass
             
             # Encoder-Werte abrufen
             left_ticks, right_ticks = encoderReader.GetValues() 
