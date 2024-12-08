@@ -1,6 +1,7 @@
-import RPi.GPIO as GPIO
 import socket
 import time
+import select
+import RPi.GPIO as GPIO
 from encoder_Reader import EncoderReader
 
 encoderReader = EncoderReader(20,21,26,27)
@@ -24,47 +25,73 @@ HOST = '192.168.178.20'  # IP-Adresse des PCs
 PORT = 12345
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-print("Versuche Verbindung mit dem PC...")
-sock.connect((HOST, PORT))
-print("Verbindung hergestellt!")
+# Setze Socket in nicht-blockierenden Modus
+sock.setblocking(False)
 
-sock.settimeout(1)  # Timeout nach 5 Sekunden
+print("Versuche Verbindung mit dem PC...")
+try:
+    sock.connect((HOST, PORT))
+except BlockingIOError:
+    # Dieser Fehler ist normal beim nicht-blockierenden connect
+    pass
+
+print("Verbindung hergestellt!")
 
 try:
     # Handshake: Sende Testnachricht an PC
     sock.send("HELLO_PC\n".encode('utf-8'))
     print("Handshake gesendet: HELLO_PC")
 
-    # Warte auf Antwort vom PC
-    response = sock.recv(1024).decode('utf-8').strip()
+    # Warte auf Antwort vom PC mit Timeout
+    start_time = time.time()
+    response = ""
+    while not response:
+        try:
+            response = sock.recv(1024).decode('utf-8').strip()
+        except BlockingIOError:
+            # Keine Daten verfügbar
+            if time.time() - start_time > 5:  # 5 Sekunden Timeout
+                print("Timeout beim Warten auf Handshake-Antwort")
+                break
+            time.sleep(0.1)
+
     if response == "HELLO_PI":
         print("Handshake erfolgreich: Antwort vom PC erhalten ->", response)
     else:
         print("Unerwartete Antwort vom PC:", response)
 
-    time.sleep(1)
-    # Hauptschleife (Dummy-Daten senden)
+    # Hauptschleife
     while True:
         try:
-            # Daten vom PC empfangen
-            data = sock.recv(1024).decode('utf-8')
-            if data:
-                left_speed, right_speed = map(int, data.split(","))
-                
-                # PWM-Signale setzen
-                pwm1.ChangeDutyCycle(left_speed)
-                pwm2.ChangeDutyCycle(right_speed)
+            # Versuche, Daten zu empfangen
+            readable, _, _ = select.select([sock], [], [], 0.1)
             
-            # Encoder-Werte simulieren (z. B. Zufallswerte oder GPIO-Eingaben)
+            if readable:
+                data = sock.recv(1024).decode('utf-8').strip()
+                print("Empfangene Daten:", data)  # Debug-Ausgabe
+                
+                if data:
+                    left_speed, right_speed = map(int, data.split(","))
+                    
+                    # PWM-Signale setzen
+                    pwm1.ChangeDutyCycle(left_speed)
+                    pwm2.ChangeDutyCycle(right_speed)
+            
+            # Encoder-Werte abrufen
             left_ticks, right_ticks = encoderReader.GetValues() 
             
             # Daten an PC senden
-            sock.send(f"{50},{50}\n".encode('utf-8'))
+            try:
+                sock.send(f"{left_ticks},{right_ticks}\n".encode('utf-8'))
+            except (BrokenPipeError, ConnectionResetError):
+                print("Verbindung zum PC unterbrochen")
+                break
+            
             time.sleep(0.1)
-        except socket.timeout:
-            # Timeout ausgelöst, keine Daten empfangen
-            print("Timeout: Keine Daten empfangen, versuche es erneut.")
-            continue  # Weiter mit der nächsten Iteration
+
+        except Exception as e:
+            print(f"Fehler in Hauptschleife: {e}")
+            time.sleep(0.1)
 
 except KeyboardInterrupt:
     print("Beendet durch Benutzer")
