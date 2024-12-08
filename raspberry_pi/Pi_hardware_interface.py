@@ -81,6 +81,7 @@ try:
 
     # Hauptschleife
     while True:
+        motorDriver.setPWM(50,50)
         motorDriver.DriveForward()
         try:
             # Versuche, Daten zu empfangen
