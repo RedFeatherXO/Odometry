@@ -9,7 +9,7 @@ from GPIO_Manager import GPIOManager
 
 GPIO.cleanup()  # Räumt alle vorherigen GPIO-Einstellungen auf
 gpioManager = GPIOManager()
-encoderReader = EncoderReader(20,21,26,27)
+#encoderReader = EncoderReader(20,21,26,27)
 motorDriver  = MotorDriver(17,18,22,23)
 
 # GPIO-Setup
