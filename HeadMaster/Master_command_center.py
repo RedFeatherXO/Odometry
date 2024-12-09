@@ -18,6 +18,8 @@ class SocketServer:
         self.address = None
         self.is_running = False
         self.connection_thread = None
+        self.AllTicksRight = 0
+        self.AllTicksLeft = 0
 
     def start_server(self):
         """
@@ -127,6 +129,8 @@ class SocketServer:
         try:
             # Beispiel für Datenverarbeitung
             left_ticks, right_ticks = data.split(",")
+            self.AllTicksRight += right_ticks
+            self.AllTicksLeft += left_ticks
             print(f"Encoder: {left_ticks}, {right_ticks}")
             
             # Optional: Steuerbefehle senden
@@ -136,6 +140,9 @@ class SocketServer:
         
         except ValueError as ve:
             print(f"Fehler beim Verarbeiten der Daten: {ve}")
+
+    def GetAllTicks(self):
+        return self.AllTicksRight, self.AllTicksLeft
 
     def stop_server(self):
         """
