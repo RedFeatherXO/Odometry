@@ -57,9 +57,9 @@ class EncoderReader:
         B = GPIO.input(self.E2B)  # Zustand von Signal B
 
         if A != B:
-            self.spin_count2 += 1  # Vorwärts
+            self.spin_count2 -= 1  # Vorwärts
         else:
-            self.spin_count2 -= 1  # Rückwärts
+            self.spin_count2 += 1  # Rückwärts
 
 
 
