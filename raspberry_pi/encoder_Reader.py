@@ -16,10 +16,10 @@ class EncoderReader:
         GPIO.setup(self.E1B,GPIO.IN,pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.E2A,GPIO.IN,pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.E2B,GPIO.IN,pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(self.E1A, GPIO.BOTH, callback=self.myCallBack1)
-        GPIO.add_event_detect(self.E1B, GPIO.BOTH, callback=self.myCallBack1)
-        GPIO.add_event_detect(self.E2A, GPIO.BOTH, callback=self.myCallBack2)
-        GPIO.add_event_detect(self.E2B, GPIO.BOTH, callback=self.myCallBack2)
+        GPIO.add_event_detect(self.E1A, GPIO.RISING, callback=self.myCallBack1)
+        GPIO.add_event_detect(self.E1B, GPIO.RISING, callback=self.myCallBack1)
+        GPIO.add_event_detect(self.E2A, GPIO.RISING, callback=self.myCallBack2)
+        GPIO.add_event_detect(self.E2B, GPIO.RISING, callback=self.myCallBack2)
     def GetValues(self):
         return self.spin_count1,self.spin_count2
               
