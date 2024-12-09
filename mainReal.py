@@ -1,25 +1,59 @@
 import pygame
 import time
 import math
+import threading
+import queue
 from DifferentialDriveRobot import DifferentialDriveRobot
 from RobotSimulationPyGame import RobotSimulation
 from RobotController import RobotController
 from MotorController import MotorControl
+from HeadMaster.Master_command_center import SocketServer
 import os
-os.environ["SDL_VIDEODRIVER"] = "x11"
+
+# Globale Queue für Tick-Daten
+tick_queue = queue.Queue()
+
+class ThreadedSocketServer(SocketServer):
+    def __init__(self, tick_queue):
+        super().__init__()
+        self.tick_queue = tick_queue
+        self.daemon = True  # Thread wird beendet, wenn Hauptprogramm endet
+
+    def _process_data(self, data):
+        """
+        Überschreibt die Datenverarbeitungsmethode, um Ticks in die Queue zu legen
+        """
+        try:
+            left_ticks, right_ticks = map(int, data.split(","))
+            # Ticks in die Queue legen
+            self.tick_queue.put((left_ticks, right_ticks))
+        except (ValueError, Exception) as e:
+            print(f"Fehler bei Datenverarbeitung: {e}")
+
+def get_ticks_from_queue(tick_queue):
+    """
+    Hilfsfunktion zum Abrufen der letzten Ticks aus der Queue
+    """
+    left_ticks, right_ticks = 0, 0
+    while not tick_queue.empty():
+        left_ticks, right_ticks = tick_queue.get()
+    return right_ticks, left_ticks
+
 # Roboter initialisieren
 robot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
 realRobot = DifferentialDriveRobot(wheel_radius=0.05, wheel_distance=0.21)
 simulation = RobotSimulation(robot)
 robController = RobotController(realRobot)
-motorController = MotorControl()
+#motorController = MotorControl()
 RealSim = RobotSimulation(realRobot)
+socketServer = ThreadedSocketServer(tick_queue)
+socketServer.start_server()
 
 # Pygame initialisieren
 pygame.init()
 pygame.joystick.init()
-motorController.setup_gpio()
-motorController.set_motor_speed(50,50)
+#motorController.setup_gpio()
+#motorController.set_motor_speed(50,50)
 
 def wait_for_controller():
     print("Warte auf Controller-Verbindung...")
@@ -43,8 +77,10 @@ running = True
 clock = pygame.time.Clock()
 dt = 0.1  # Simulationsschritt in Sekunden
 DEADZONE = 0.1  # Wert zwischen 0 und 1, unter dem Bewegungen ignoriert werden
+Last_LeftTicks = 0
+Last_RightTicks = 0
 
-print(joystick.get_numaxes()-1)
+#print(joystick.get_numaxes()-1)
 
 try:
     while running:
@@ -79,7 +115,14 @@ try:
         # Geschwindigkeit in Ticks umwandeln
         left_ticks = int((left_wheel_speed * dt * 260 / wheel_circumference))
         right_ticks = int((right_wheel_speed * dt * 260 / wheel_circumference))
-        real_right_ticks, real_left_ticks = robController.getEncoderData()
+         # Ticks von Socket-Server abrufen
+        real_right_ticks, real_left_ticks = get_ticks_from_queue(tick_queue)
+        
+        real_right_ticks -= Last_RightTicks
+        real_left_ticks  -= Last_LeftTicks
+
+        Last_LeftTicks = real_left_ticks
+        Last_RightTicks = real_right_ticks
 
         #print(f"left_ticks: {left_ticks}")
         # Bewegung simulieren
@@ -97,4 +140,5 @@ try:
 except KeyboardInterrupt:
     print("Simulation beendet")
 finally:
-    pygame.quit()
+    socketServer.stop_server()
+    pygame.quit() 
