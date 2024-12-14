@@ -85,9 +85,10 @@ try:
         i += 1
         if i >= 1000:
             motorDriver.setPWM(0,0)
+            motorDriver.DriveStop()
         else:
             motorDriver.setPWM(10,10)
-        motorDriver.DriveForward()
+            motorDriver.DriveForward()
         try:
             # Versuche, Daten zu empfangen
             # readable, _, _ = select.select([sock], [], [], 0.1)
