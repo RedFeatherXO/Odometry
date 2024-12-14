@@ -165,6 +165,8 @@ try:
         simulation.draw(screen,(0,0,255),linear_speed,angular_speed,True)
         RealSim.draw(screen,(0,255,255))
 
+        print(f"Encoder left: {real_left_ticks}; Encoder right {real_right_ticks}; X: {RealSim.trajectory[0]}; Y: {RealSim.trajectory[1]}; w: {RealSim.trajectory[2]}")
+
         pygame.display.flip()
         # Framerate steuern
         clock.tick(30)
