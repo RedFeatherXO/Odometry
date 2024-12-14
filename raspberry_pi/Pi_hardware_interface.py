@@ -83,7 +83,7 @@ try:
     i = 0
     while True:
         i += 1
-        if i >= 100000:
+        if i >= 1000:
             motorDriver.setPWM(0,0)
         else:
             motorDriver.setPWM(10,10)
