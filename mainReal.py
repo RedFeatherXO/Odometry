@@ -9,6 +9,7 @@ from RobotController import RobotController
 from MotorController import MotorControl
 from HeadMaster.Master_command_center import SocketServer
 import os
+import sys
 
 # Globale Queue für Tick-Daten
 tick_queue = queue.Queue()
@@ -63,14 +64,45 @@ def wait_for_controller():
         time.sleep(1)
     print("Controller gefunden!")
 
-# Auf Controller warten
-wait_for_controller()
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
+def wait_for_x_button():
+    print("Press X button to start the program...")
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            # print(f"Nutton Fpresemd: {event}")
+            if event.type == pygame.JOYBUTTONDOWN:
+                # Check for X button (typically index 0 or 1 depending on controller)
+                # print(f"Nutton Fpresemd: {event.button}")
+                if event.button == 0:  # PlayStation X button
+                    print("X button pressed. Starting program...")
+                    waiting = False
+                    break
+            elif event.type == pygame.QUIT:
+                return False
+        
+        time.sleep(0.1)  # Prevent high CPU usage
+    return True
 
-# Pygame Fenster öffnen
-screen = pygame.display.set_mode(simulation.screen_size)
-pygame.display.set_caption("Robot Simulation")
+try:
+    # Auf Controller warten
+    wait_for_controller()
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+
+    # Pygame Fenster öffnen
+    screen = pygame.display.set_mode(simulation.screen_size)
+    pygame.display.set_caption("Robot Simulation")
+
+    if not wait_for_x_button():
+        print("Program terminated.")
+        pygame.quit()
+        sys.exit()
+
+except KeyboardInterrupt:
+    print("Simulation beendet")
+    socketServer.stop_server()
+    pygame.quit()
+    sys.exit()
 
 # Simulationsparameter
 running = True

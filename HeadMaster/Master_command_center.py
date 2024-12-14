@@ -2,7 +2,7 @@ import socket
 import time
 import select
 import threading
-
+#Pi address 192.168.178.96
 class SocketServer:
     def __init__(self, host='0.0.0.0', port=12345):
         """
