@@ -80,8 +80,13 @@ try:
         print("Unerwartete Antwort vom PC:", response)
 
     # Hauptschleife
+    i = 0
     while True:
-        motorDriver.setPWM(10,10)
+        i += 1
+        if i >= 100000:
+            motorDriver.setPWM(0,0)
+        else:
+            motorDriver.setPWM(10,10)
         motorDriver.DriveForward()
         try:
             # Versuche, Daten zu empfangen
