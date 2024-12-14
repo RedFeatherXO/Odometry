@@ -84,7 +84,7 @@ try:
     while True:
         i += 1
         print(i)
-        if i >= 1000:
+        if i >= 15:
             motorDriver.setPWM(0,0)
             motorDriver.DriveStop()
         else:
